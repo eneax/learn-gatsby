@@ -1,18 +1,16 @@
 import React from 'react';
 import { graphql } from 'gatsby';
+import Img from 'gatsby-image';
+import styled from 'styled-components';
 
-const PizzaTemplate = ({ data: pizza }) => {
-  console.log(pizza);
+// styles
+const PizzaGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-gap: 2rem;
+`;
 
-  return (
-    <div>
-      <p>Pizza Template</p>
-    </div>
-  );
-};
-
-export default PizzaTemplate;
-
+// query
 export const SinglePizzaPageQuery = graphql`
   query SinglePizzaPageQuery($slug: String!) {
     pizza: sanityPizza(slug: { current: { eq: $slug } }) {
@@ -33,3 +31,23 @@ export const SinglePizzaPageQuery = graphql`
     }
   }
 `;
+
+const PizzaTemplate = ({ data: { pizza } }) => {
+  const { name, image, toppings } = pizza;
+
+  return (
+    <PizzaGrid>
+      <Img fluid={image.asset.fluid} />
+      <div>
+        <h2 className="mark">{name}</h2>
+        <ul>
+          {toppings.map(({ id, name }) => (
+            <li key={id}>{name}</li>
+          ))}
+        </ul>
+      </div>
+    </PizzaGrid>
+  );
+};
+
+export default PizzaTemplate;
