@@ -18,8 +18,10 @@ const PizzasPage = ({ data }) => {
 export default PizzasPage;
 
 export const pizzasQuery = graphql`
-  {
-    pizzas: allSanityPizza {
+  query PizzasQuery($topping: [String]) {
+    pizzas: allSanityPizza(
+      filter: { toppings: { elemMatch: { name: { in: $topping } } } }
+    ) {
       nodes {
         id
         name
@@ -42,3 +44,33 @@ export const pizzasQuery = graphql`
     }
   }
 `;
+
+// export const PizzaQuery = graphql`
+//   query PizzaQuery($toppingRegex: String) {
+//     pizzas: allSanityPizza(
+//       filter: { toppings: { elemMatch: { name: { regex: $toppingRegex } } } }
+//     ) {
+//       nodes {
+//         name
+//         id
+//         slug {
+//           current
+//         }
+//         toppings {
+//           id
+//           name
+//         }
+//         image {
+//           asset {
+//             fixed(width: 600, height: 200) {
+//               ...GatsbySanityImageFixed
+//             }
+//             fluid(maxWidth: 400) {
+//               ...GatsbySanityImageFluid
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;
