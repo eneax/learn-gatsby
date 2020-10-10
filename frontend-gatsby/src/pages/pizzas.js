@@ -1,6 +1,7 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 
+import ToppingsFilter from '../components/toppingsFilter';
 import PizzaList from '../components/pizzaList';
 
 const PizzasPage = ({ data }) => {
@@ -8,6 +9,7 @@ const PizzasPage = ({ data }) => {
 
   return (
     <>
+      <ToppingsFilter />
       <PizzaList pizzas={pizzas} />
     </>
   );
