@@ -1,7 +1,9 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 import styled from 'styled-components';
+import SEO from '../components/seo';
 
+// styles
 const BeerGridStyled = styled.div`
   display: grid;
   gap: 2rem;
@@ -23,8 +25,29 @@ const SingleBeerStyled = styled.div`
   }
 `;
 
+// query
+export const BeersQuery = graphql`
+  query BeersQuery {
+    beers: allBeer {
+      totalCount
+      nodes {
+        id
+        name
+        image
+        price
+        rating {
+          reviews
+          average
+        }
+      }
+    }
+  }
+`;
+
 const BeersPage = ({ data: { beers } }) => (
   <>
+    <SEO title={`Beers! We have ${beers.totalCount} in stock!`} />
+
     <h2 className="center">
       We have {beers.totalCount} Beers available. Dine in only!
     </h2>
@@ -53,21 +76,3 @@ const BeersPage = ({ data: { beers } }) => (
 );
 
 export default BeersPage;
-
-export const BeersQuery = graphql`
-  query BeersQuery {
-    beers: allBeer {
-      totalCount
-      nodes {
-        id
-        name
-        image
-        price
-        rating {
-          reviews
-          average
-        }
-      }
-    }
-  }
-`;

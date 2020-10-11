@@ -1,5 +1,13 @@
 import React from 'react';
 
-const FourOhFourPage = () => <p>Hey - That page doesn't exist!</p>;
+import SEO from '../components/seo';
+
+const FourOhFourPage = () => (
+  <>
+    <SEO title="Four Oh Four" />
+
+    <p>Hey - That page doesn't exist!</p>
+  </>
+);
 
 export default FourOhFourPage;

@@ -1,5 +1,13 @@
 import React from 'react';
 
-const HomePage = () => <p>Welcome to the homepage!</p>;
+import SEO from '../components/seo';
+
+const HomePage = () => (
+  <>
+    <SEO title="Homepage" />
+
+    <p>Welcome to the homepage!</p>
+  </>
+);
 
 export default HomePage;

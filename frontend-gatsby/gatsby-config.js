@@ -7,6 +7,7 @@ module.exports = {
     title: `Slicks Slices`,
     siteUrl: `http://localhost:9000`,
     description: `The best pizza place in town!`,
+    twitter: '@slicksSlices',
   },
   plugins: [
     'gatsby-plugin-react-helmet',

@@ -4,7 +4,9 @@ import Img from 'gatsby-image';
 import styled from 'styled-components';
 
 import Pagination from '../components/pagination';
+import SEO from '../components/seo';
 
+// styles
 const SlicemasterGrid = styled.div`
   display: grid;
   grid-gap: 2rem;
@@ -41,11 +43,37 @@ const SlicemasterStyled = styled.div`
   }
 `;
 
+// query
+export const SlicemastersQuery = graphql`
+  query SlicemastersQuery($skip: Int = 0, $pageSize: Int = 2) {
+    slicemasters: allSanityPerson(limit: $pageSize, skip: $skip) {
+      totalCount
+      nodes {
+        id
+        slug {
+          current
+        }
+        name
+        description
+        image {
+          asset {
+            fluid(maxWidth: 400) {
+              ...GatsbySanityImageFluid
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 const SlicemastersPage = ({ data, pageContext }) => {
   const slicemasters = data.slicemasters.nodes;
 
   return (
     <>
+      <SEO title={`Slicemasters - Page ${pageContext.currentPage || 1}`} />
+
       <Pagination
         pageSize={parseInt(process.env.GATSBY_PAGE_SIZE)}
         totalCount={data.slicemasters.totalCount}
@@ -73,26 +101,3 @@ const SlicemastersPage = ({ data, pageContext }) => {
 };
 
 export default SlicemastersPage;
-
-export const SlicemastersQuery = graphql`
-  query SlicemastersQuery($skip: Int = 0, $pageSize: Int = 2) {
-    slicemasters: allSanityPerson(limit: $pageSize, skip: $skip) {
-      totalCount
-      nodes {
-        id
-        slug {
-          current
-        }
-        name
-        description
-        image {
-          asset {
-            fluid(maxWidth: 400) {
-              ...GatsbySanityImageFluid
-            }
-          }
-        }
-      }
-    }
-  }
-`;
