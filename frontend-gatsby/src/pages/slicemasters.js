@@ -65,8 +65,8 @@ const SlicemastersPage = ({ data }) => {
 export default SlicemastersPage;
 
 export const SlicemastersQuery = graphql`
-  query SlicemastersQuery {
-    slicemasters: allSanityPerson {
+  query SlicemastersQuery($skip: Int = 0, $pageSize: Int = 2) {
+    slicemasters: allSanityPerson(limit: $pageSize, skip: $skip) {
       totalCount
       nodes {
         id
