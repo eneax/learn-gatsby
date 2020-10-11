@@ -1,4 +1,5 @@
 import path from 'path';
+import fetch from 'isomorphic-fetch'; // so we can use fetch in node.js
 
 async function turnPizzasIntoPages({ graphql, actions }) {
   // 1. Get a template for this page
@@ -57,6 +58,41 @@ async function turnToppingsIntoPages({ graphql, actions }) {
   });
 
   // 4. Pass toppings data to pizzaTemplate
+}
+
+// Source Beers Data from an external API
+async function fetchBeersAndTurnIntoNodes({
+  actions,
+  createNodeId,
+  createContentDigest,
+}) {
+  // 1. Fetch a list of beers
+  const res = await fetch('https://sampleapis.com/beers/api/ale');
+  const beers = await res.json();
+  // 2. Loop over each one
+  beers.forEach((beer) => {
+    // metadata on the actual beer content
+    const nodeMeta = {
+      id: createNodeId(`beer-${beer.name}`),
+      parent: null,
+      children: [],
+      internal: {
+        type: 'Beer', // so we can query using 'allBeer' and 'beer'
+        mediaType: 'application/json',
+        contentDigest: createContentDigest(beer),
+      },
+    };
+    // 3. Create a node for that beer
+    actions.createNode({
+      ...beer,
+      ...nodeMeta,
+    });
+  });
+}
+
+// Fetch a list of beers and source them into our Gatsby API
+export async function sourceNodes(params) {
+  await Promise.all([fetchBeersAndTurnIntoNodes(params)]);
 }
 
 // Create pages dynamically
