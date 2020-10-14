@@ -4,10 +4,13 @@ import Img from 'gatsby-image';
 import styled from 'styled-components';
 
 import useForm from '../utils/useForm';
+import usePizza from '../utils/usePizza';
 import calculatePizzaPrice from '../utils/calculatePizzaPrice';
 import formatMoney from '../utils/formatMoney';
 
+import MenuItemStyled from '../styles/menuItemStyled';
 import SEO from '../components/seo';
+import PizzaOrder from '../components/pizzaOrder';
 
 // styles
 const OrderStyled = styled.form`
@@ -37,42 +40,6 @@ const OrderStyled = styled.form`
   } */
 `;
 
-const MenuItemStyled = styled.div`
-  display: grid;
-  grid-template-columns: 100px 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 0 1.3rem;
-  align-content: center;
-  align-items: center;
-
-  .gatsby-image-wrapper {
-    grid-row: span 2;
-    height: 100%;
-  }
-
-  p {
-    margin: 0;
-  }
-
-  button {
-    font-size: 1.5rem;
-  }
-  button + button {
-    margin-left: 1rem;
-  }
-
-  .remove {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: none;
-    box-shadow: none;
-    color: var(--red);
-    font-size: 3rem;
-    line-height: 1rem;
-  }
-`;
-
 // query
 export const OrderPizzasQuery = graphql`
   query OrderPizzasQuery {
@@ -97,12 +64,17 @@ export const OrderPizzasQuery = graphql`
 `;
 
 const OrderPage = ({ data }) => {
+  const pizzas = data.pizzas.nodes;
+
   const { values, updateValue } = useForm({
     name: '',
     email: '',
   });
 
-  const pizzas = data.pizzas.nodes;
+  const { order, addToOrder, removeFromOrder } = usePizza({
+    pizzas,
+    inputs: values,
+  });
 
   return (
     <>
@@ -148,7 +120,11 @@ const OrderPage = ({ data }) => {
               </div>
               <div>
                 {['S', 'M', 'L'].map((size) => (
-                  <button type="button">
+                  <button
+                    type="button"
+                    key={size}
+                    onClick={() => addToOrder({ id, size })}
+                  >
                     {size} {formatMoney(calculatePizzaPrice(price, size))}
                   </button>
                 ))}
@@ -159,6 +135,11 @@ const OrderPage = ({ data }) => {
 
         <fieldset className="order">
           <legend>Order</legend>
+          <PizzaOrder
+            order={order}
+            pizzas={pizzas}
+            removeFromOrder={removeFromOrder}
+          />
         </fieldset>
       </OrderStyled>
     </>
