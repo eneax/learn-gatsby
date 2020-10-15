@@ -14,7 +14,7 @@ const PizzaOrder = ({ order, pizzas, removeFromOrder }) => (
       );
 
       return (
-        <MenuItemStyled key={singleOrder.id}>
+        <MenuItemStyled key={`${singleOrder.id}-${index}`}>
           <Img fluid={pizza.image.asset.fluid} />
           <h2>{pizza.name}</h2>
           <p>
