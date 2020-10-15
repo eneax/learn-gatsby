@@ -39,6 +39,7 @@ const usePizza = ({ pizzas, values }) => {
       total: formatMoney(calculateOrderTotal(order, pizzas)),
       name: values.name,
       email: values.email,
+      mapleSyrup: values.mapleSyrup,
     };
 
     // Send this data to a serverless function when they check out

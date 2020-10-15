@@ -42,6 +42,13 @@ const transporter = nodemailer.createTransport({
 
 exports.handler = async (event, context) => {
   const body = JSON.parse(event.body);
+  // Check if they field out the honeypot
+  if (body.mapleSyrup) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: 'rAn0m nUmb3R' }),
+    };
+  }
   // Validate the data coming in is correct
   const requiredFields = ['name', 'email', 'order'];
   for (const field of requiredFields) {

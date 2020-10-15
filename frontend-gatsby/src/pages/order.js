@@ -31,6 +31,10 @@ const OrderStyled = styled.form`
     &.menu {
       grid-column: span 1;
     }
+
+    .mapleSyrup {
+      display: none;
+    }
   }
 
   /* @media (max-width: 900px) {
@@ -70,6 +74,7 @@ const OrderPage = ({ data }) => {
   const { values, updateValue } = useForm({
     name: '',
     email: '',
+    mapleSyrup: '',
   });
 
   const {
@@ -116,6 +121,14 @@ const OrderPage = ({ data }) => {
               onChange={updateValue}
             />
           </label>
+          <input
+            type="mapleSyrup"
+            name="mapleSyrup"
+            id="mapleSyrup"
+            className="mapleSyrup"
+            value={values.mapleSyrup}
+            onChange={updateValue}
+          />
         </fieldset>
 
         <fieldset className="menu" disabled={loading}>
