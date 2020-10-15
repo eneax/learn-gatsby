@@ -94,7 +94,7 @@ const OrderPage = ({ data }) => {
       <SEO title="Order a Pizza!" />
 
       <OrderStyled onSubmit={submitOrder}>
-        <fieldset>
+        <fieldset disabled={loading}>
           <legend>Your Info</legend>
           <label htmlFor="name">
             Name
@@ -118,7 +118,7 @@ const OrderPage = ({ data }) => {
           </label>
         </fieldset>
 
-        <fieldset className="menu">
+        <fieldset className="menu" disabled={loading}>
           <legend>Menu</legend>
           {pizzas.map(({ id, name, image, price }) => (
             <MenuItemStyled key={id}>
@@ -146,7 +146,7 @@ const OrderPage = ({ data }) => {
           ))}
         </fieldset>
 
-        <fieldset className="order">
+        <fieldset className="order" disabled={loading}>
           <legend>Order</legend>
           <PizzaOrder
             order={order}
@@ -155,7 +155,7 @@ const OrderPage = ({ data }) => {
           />
         </fieldset>
 
-        <fieldset>
+        <fieldset disabled={loading}>
           <legend>Total</legend>
           <h3>
             Your total is {formatMoney(calculateOrderTotal(order, pizzas))}
