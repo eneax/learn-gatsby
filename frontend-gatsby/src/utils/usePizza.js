@@ -1,10 +1,17 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+
+import attachNamesAndPrices from './attachNamesAndPrices';
+import calculateOrderTotal from './calculateOrderTotal';
+import formatMoney from './formatMoney';
 
 import OrderContext from '../components/orderContext';
 
-const usePizza = ({ pizzas, inputs }) => {
+const usePizza = ({ pizzas, values }) => {
   // Access state and updater function (setOrder) via context
   const [order, setOrder] = useContext(OrderContext);
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
   // Make a function to add things to order
   const addToOrder = (orderedPizza) => {
     setOrder([...order, orderedPizza]);
@@ -18,9 +25,55 @@ const usePizza = ({ pizzas, inputs }) => {
       ...order.slice(index + 1),
     ]);
   };
-  // TODO: Send this data to a serverless function when they check out
 
-  return { order, addToOrder, removeFromOrder };
+  // this function is run when somebody submits the form
+  const submitOrder = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setMessage(null);
+
+    // gather all the data that needs to be send
+    const body = {
+      order: attachNamesAndPrices(order, pizzas),
+      total: formatMoney(calculateOrderTotal(order, pizzas)),
+      name: values.name,
+      email: values.email,
+    };
+
+    // Send this data to a serverless function when they check out
+    const res = await fetch(
+      `${process.env.GATSBY_SERVERLESS_BASE}/placeOrder`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      }
+    );
+
+    const text = JSON.parse(await res.text());
+
+    // check if everything worked
+    if (res.status >= 400 && res.status < 600) {
+      setLoading(false);
+      setError(text.message);
+    } else {
+      setLoading(false);
+      setMessage('Success! Come on down for your pizza!');
+    }
+  };
+
+  return {
+    order,
+    addToOrder,
+    removeFromOrder,
+    error,
+    loading,
+    message,
+    submitOrder,
+  };
 };
 
 export default usePizza;
