@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useContext } from 'react';
+
+import OrderContext from '../components/orderContext';
 
 const usePizza = ({ pizzas, inputs }) => {
-  // 1. Create some state to hold our order
-  const [order, setOrder] = useState([]);
-  // 2. Make a function to add things to order
+  // Access state and updater function (setOrder) via context
+  const [order, setOrder] = useContext(OrderContext);
+  // Make a function to add things to order
   const addToOrder = (orderedPizza) => {
     setOrder([...order, orderedPizza]);
   };
-  // 3. Make a function to remove things from order
+  // Make a function to remove things from order
   const removeFromOrder = (index) => {
     setOrder([
       // everything before the item we want to remove
@@ -16,7 +18,7 @@ const usePizza = ({ pizzas, inputs }) => {
       ...order.slice(index + 1),
     ]);
   };
-  // TODO: 4. Send this data to a serverless function when they check out
+  // TODO: Send this data to a serverless function when they check out
 
   return { order, addToOrder, removeFromOrder };
 };
