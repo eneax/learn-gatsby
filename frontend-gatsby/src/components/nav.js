@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import Logo from './logo';
 
 const NavStyled = styled.nav`
-  margin-bottom: 3rem;
-
   .logo {
     transform: translateY(-25%);
   }
