@@ -1,5 +1,21 @@
 import { useState, useEffect } from 'react';
 
+// Fake graphql, just to get string highlighting
+const gql = String.raw;
+
+const deets = `
+    name
+    _id
+    image {
+      asset {
+        url
+        metadata {
+          lqip
+        }
+      }
+    }
+`;
+
 const useLatestData = () => {
   // hot slices and slicemasters
   const [hotSlices, setHotSlices] = useState();
@@ -14,15 +30,15 @@ const useLatestData = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        query: `
-          {
+        query: gql`
+          query {
             StoreSettings(id: "downtown") {
               name
               slicemaster {
-                name
+                ${deets}
               }
               hotSlices {
-                name
+                ${deets}
               }
             }
           }
@@ -31,10 +47,13 @@ const useLatestData = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        // TODO: check for errors
         // set the data to state
         setHotSlices(res.data.StoreSettings.hotSlices);
         setSlicemasters(res.data.StoreSettings.slicemaster);
+      })
+      .catch((err) => {
+        console.log('SHOOOOOT');
+        console.log(err);
       });
   }, []);
 
