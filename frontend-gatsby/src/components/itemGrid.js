@@ -3,8 +3,8 @@ import { ItemsGrid, ItemStyled } from '../styles/grids';
 
 const ItemGrid = ({ items }) => (
   <ItemsGrid>
-    {items.map(({ name, image }) => (
-      <ItemStyled key={name}>
+    {items.map(({ _id, name, image }) => (
+      <ItemStyled key={_id}>
         <p>
           <span className="mark">{name}</span>
         </p>
